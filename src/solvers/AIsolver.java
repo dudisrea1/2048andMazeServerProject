@@ -16,7 +16,6 @@ import model.GameModel;
  * @author Vasilis Vryniotis <bbriniotis at datumbox.com>
  */
 public class AIsolver {
-	// private static Game2048Model g2048 = new Game2048Model();
 	private static GameModel model = null;
 
 	/**
@@ -131,7 +130,7 @@ public class AIsolver {
 					model.setBoard(newBoard);
 					boolean res = model.movement(direction[0], direction[1]);
 
-					if (!res) {
+					if (res) {
 						continue;
 					}
 

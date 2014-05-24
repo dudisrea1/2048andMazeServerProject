@@ -1,18 +1,13 @@
 package Game2048;
 
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Random;
 import java.util.Stack;
 
-import model.ClientRequest;
 import model.GameBoard;
 import model.GameModel;
-
 
 public class Game2048Model extends Observable implements GameModel,
 		Serializable {
@@ -28,7 +23,7 @@ public class Game2048Model extends Observable implements GameModel,
 	public Stack<Board2048> undo;
 	private String difficulty = "Normal";
 	private boolean gameover = false;
-	
+
 //	/**
 //	 * The default constructor of the model will create a 4X4 board
 //	 */
@@ -628,22 +623,4 @@ public class Game2048Model extends Observable implements GameModel,
 		possibleMoves.add(new Integer[] { -1, 0 });
 		return possibleMoves;
 	}
-
-
-	
-	public Integer[] GetBestMove() {
-			return null;
-		
-	}
-
-	@Override
-	public void DoBestMoves(final int MovesNnumber)
-	{
-		
-	}
-	@Override
-	public boolean CanAskServer(){
-		
-		return true;
-	}	
 }
