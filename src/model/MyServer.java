@@ -81,11 +81,12 @@ public class MyServer extends Observable {
 										public void run() {
 																							
 										clientHandler.handleClient(inFromClient, out2client);
+										/*
 										try{
 											inFromClient.close();
 											out2client.close();
 											someClient.close();
-										} catch(Exception e){}
+										} catch(Exception e){}*/
 										
 										}
 									});

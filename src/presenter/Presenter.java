@@ -36,12 +36,14 @@ public class Presenter implements Observer {
 					public void handleClient(ObjectInputStream inFromClient,ObjectOutputStream out2client) {
 						ClientRequest request;
 						try {
-							while((request = (ClientRequest) (inFromClient.readObject()))!=null)
-							{
+						request = (ClientRequest) (inFromClient.readObject());
+						
+							
+							
 							Integer[] stam = AIsolver.findBestMove(request.getBoard(), request.getDepth(),request.getMethod(), request.getModel());
 							System.out.println(stam[0]+","+stam[1]);
 							out2client.writeObject(stam);
-							}
+							
 
 						} catch (Exception e) {
 							e.printStackTrace();

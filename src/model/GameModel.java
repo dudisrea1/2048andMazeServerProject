@@ -33,4 +33,15 @@ public interface GameModel {
 	boolean isBoardEquals(int[][] A, int[][] B);
 
 	ArrayList<Integer[]> getPossibleMoves();
+	
+	//void setSolverServerProperties(ServerProperties arg1);
+
+	boolean CanAskServer();
+	
+	
+	
+	void DoBestMoves(int MovesNnumber);
+
+	
+
 }
