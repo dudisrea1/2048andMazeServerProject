@@ -68,13 +68,13 @@ public class AIsolver {
 			listofMoves = model.getPossibleMoves();
 		Map<String, Object> result = new HashMap<String, Object>();
 		Integer[] arr = new Integer[2];
-		if (bestMovesCache.get("" + theBoard.getBoardHash()) != null) {
+		/*if (bestMovesCache.get("" + theBoard.getBoardHash()) != null) {
 			String[] tmp = bestMovesCache.get(
 					new String("" + theBoard.getBoardHash())).split(",");
 			arr = new Integer[] { Integer.parseInt(tmp[0]),
 					Integer.parseInt(tmp[1]) };
 			System.out.println(arr[0] + "," + arr[1]);
-		} else if (model == null) {
+		} else */if (model == null) {
 			arr = null;
 		} else {
 			switch (method) {
