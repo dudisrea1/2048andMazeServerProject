@@ -1,9 +1,5 @@
 package view;
 
-
-
-
-
 public interface View {
 	
 	void displayConnectedClients(String[] clients);

@@ -32,6 +32,7 @@ public interface GameModel {
 
 	boolean isBoardEquals(int[][] A, int[][] B);
 
+	String ArrayToString(Integer[] bestMove);
 	ArrayList<Integer[]> getPossibleMoves();
 }
 /*

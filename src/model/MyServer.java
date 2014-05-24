@@ -18,25 +18,25 @@ import java.util.Observable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class MyServer extends Observable {
+import solvers.AIsolver;
+
+public class MyServer extends Observable implements ServerModel {
 
 	private int port;
 	private ServerSocket server;
 	private boolean stop;
-	private int NumberOfClients;
+	int NumberOfClients;
 	private ClientHandler clientHandler;
 	private ServerConfiguration config;
 	private List<String> clientsList = new ArrayList<String>();
 	private Map<String, String> logMap;
 
-	public MyServer(ClientHandler clientHandler) {
+	public MyServer() {
 		config = new ServerConfiguration();
 		config.Load();
 		this.port = config.Port;
 		stop = false;
 		this.NumberOfClients = config.NumberOfClients;
-		this.clientHandler = clientHandler;
-
 		logMap = new HashMap<String, String>();
 
 	}
@@ -56,46 +56,29 @@ public class MyServer extends Observable {
 					@Override
 					public void run() {
 						String ClientIP;
-
-						ExecutorService ThredPool = Executors.newFixedThreadPool(NumberOfClients); // Defined thread pool to run multiple clients same time
+						ExecutorService ThreadPool = Executors
+								.newFixedThreadPool(NumberOfClients);
 
 						while (!stop) {
 							try {
-
 								final Socket someClient = server.accept();
-								ClientIP = someClient.getRemoteSocketAddress().toString().substring(1);
-								
-								AddLogToMap(ClientIP, "client connected");
-								WriteLog("client connected: "+ someClient.getLocalSocketAddress());
+								ClientIP = someClient.getRemoteSocketAddress()
+										.toString().substring(1);
 
-								clientsList.add(someClient.getRemoteSocketAddress().toString().substring(1));
+								AddLogToMap(ClientIP, "Client Connected");
+								WriteLog("Client Connected: " + ClientIP);
+
+								clientsList.add(ClientIP);
 								setChanged();
 								notifyObservers();
+								ThreadPool.execute(new Runnable() {
 
-								final ObjectInputStream inFromClient = new ObjectInputStream(someClient.getInputStream());
-								final ObjectOutputStream out2client = new ObjectOutputStream(someClient.getOutputStream());						
-	
-								ThredPool.execute(new Runnable() {
-	
-										@Override
-										public void run() {
-																							
-										clientHandler.handleClient(inFromClient, out2client);
-										/*
-										try{
-											inFromClient.close();
-											out2client.close();
-											someClient.close();
-										} catch(Exception e){}*/
-										
-										}
-									});
-																
-								System.out.println("out to client");
-														
-								System.out.println("client disconnected");
-								AddLogToMap(ClientIP, "client disconnected");
-								
+									@Override
+									public void run() {
+										clientHandler.handleClient(someClient);
+									}
+								});
+
 							} catch (SocketTimeoutException e) {
 							} catch (IOException e1) {
 								e1.printStackTrace();
@@ -103,40 +86,29 @@ public class MyServer extends Observable {
 
 						}
 						try {
+							ThreadPool.shutdown();
 							server.close();
 						} catch (IOException e) {
-							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
-						WriteLog("server closed");
-						System.out.println("server closed");
+						WriteLog("Server Closed");
 					}
 				});
 				t.start();
-
 				setChanged();
 				notifyObservers();
 
 			} else {
-				// return "error: illegal NumberOfClients";
-				server.close();
 				WriteLog("error: illegal NumberOfClients. server closed");
-				System.out
-						.println("error: illegal NumberOfClients. server closed");
-
 				setChanged();
 				notifyObservers();
 			}
-
-			// return "server closed";
-
 		} catch (Exception e) {
-			// return e.getMessage();
-			System.out.println(e.getMessage());
 		}
 	}
 
 	public void close() {
+
 		stop = true;
 	}
 
@@ -152,10 +124,8 @@ public class MyServer extends Observable {
 		if (value != null) {
 			logMap.put(clientIP, value + dateFormat.format(date) + " - " + log
 					+ "\r\n");
-			System.out.println(value + "\r\n" + log + "\r\n");
 		} else {
 			logMap.put(clientIP, dateFormat.format(date) + " - " + log + "\r\n");
-			System.out.println(log + "\r\n");
 		}
 	}
 
@@ -177,6 +147,71 @@ public class MyServer extends Observable {
 			return false;
 		}
 
+	}
+
+	public void InitServer() {
+
+		clientHandler = new ClientHandler() {
+			@Override
+			public void handleClient(Socket someClient) {
+				ClientRequest request;
+				ObjectInputStream inFromClient = null;
+				ObjectOutputStream out2client = null;
+				try {
+					while (!someClient.isClosed()) {
+						inFromClient = new ObjectInputStream(
+								someClient.getInputStream());
+						out2client = new ObjectOutputStream(
+								someClient.getOutputStream());
+						request = (ClientRequest) (inFromClient.readObject());
+						AIsolver ai = new AIsolver();
+						Integer[] move = ai.findBestMove(request.getBoard(),
+								request.getDepth(), request.getMethod(),
+								request.getModel());
+						AddLogToMap(someClient.getRemoteSocketAddress()
+								.toString().substring(1), request.getModel()
+								.ArrayToString(move));
+						// Double check if the client didn't disconnect in the
+						// middle
+						if (!someClient.isClosed()) {
+							out2client.writeObject(move);
+							out2client.flush();
+						}
+					}
+//					AddLogToMap(someClient.getRemoteSocketAddress().toString()
+//							.substring(1), "Client Disconnected");
+//					someClient.close();
+				} catch (Exception e) {
+					try {
+						AddLogToMap(someClient.getRemoteSocketAddress().toString()
+								.substring(1), "Client Disconnected");
+						someClient.close();
+					} catch (IOException e1) {
+					}
+				}
+			}
+		};
+
+	}
+
+	public boolean RunServer() {
+		try {
+			start();
+			WriteLog("server started");
+			return true;
+
+		} catch (Exception e) {
+			return false;
+		}
+	}
+
+	public boolean StopServer() {
+		try {
+			close();
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
 	}
 
 }

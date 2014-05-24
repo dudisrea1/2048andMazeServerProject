@@ -1,12 +1,10 @@
 package model;
 
 
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.net.Socket;
 
 
 public interface ClientHandler {
-
-	public void handleClient(ObjectInputStream inFromClient,ObjectOutputStream out2client);
+	public void handleClient(Socket someClient);
 
 }

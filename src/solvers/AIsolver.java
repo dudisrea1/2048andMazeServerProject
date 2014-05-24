@@ -16,7 +16,7 @@ import model.GameModel;
  * @author Vasilis Vryniotis <bbriniotis at datumbox.com>
  */
 public class AIsolver {
-	private static GameModel model = null;
+	private GameModel model = null;
 
 	/**
 	 * Player vs Computer enum class
@@ -33,21 +33,21 @@ public class AIsolver {
 		USER
 	}
 
-	public static void setModel(GameModel newModel) {
+	public void setModel(GameModel newModel) {
 		model = newModel;
 	}
 
-	private static BestMovesCache cacheLoader = new BestMovesCache();
+	private BestMovesCache cacheLoader = new BestMovesCache();
 
-	private static HashMap<String, String> bestMovesCache = new HashMap<String, String>();
+	private HashMap<String, String> bestMovesCache = new HashMap<String, String>();
 
-	public static void loadMap(String FileName) {
+	public void loadMap(String FileName) {
 		HashMap<String, String> tmpCache = cacheLoader.FromFile(FileName);
 		if (tmpCache != null)
 			bestMovesCache = tmpCache;
 	}
 
-	public static void saveMap(String FileName) {
+	public void saveMap(String FileName) {
 		cacheLoader.ToFile(bestMovesCache, FileName);
 	}
 
@@ -60,20 +60,20 @@ public class AIsolver {
 	 * @return
 	 * @throws CloneNotSupportedException
 	 */
-	public static Integer[] findBestMove(GameBoard theBoard, int depth,
-			int method, GameModel nmodel) throws CloneNotSupportedException {
+	public Integer[] findBestMove(GameBoard theBoard, int depth, int method,
+			GameModel nmodel) throws CloneNotSupportedException {
 		model = nmodel;
 		if (listofMoves == null)
 			listofMoves = model.getPossibleMoves();
 		Map<String, Object> result = new HashMap<String, Object>();
 		Integer[] arr = new Integer[2];
-		/*if (bestMovesCache.get("" + theBoard.getBoardHash()) != null) {
-			String[] tmp = bestMovesCache.get(
-					new String("" + theBoard.getBoardHash())).split(",");
-			arr = new Integer[] { Integer.parseInt(tmp[0]),
-					Integer.parseInt(tmp[1]) };
-			System.out.println(arr[0] + "," + arr[1]);
-		} else */if (model == null) {
+		/*
+		 * if (bestMovesCache.get("" + theBoard.getBoardHash()) != null) {
+		 * String[] tmp = bestMovesCache.get( new String("" +
+		 * theBoard.getBoardHash())).split(","); arr = new Integer[] {
+		 * Integer.parseInt(tmp[0]), Integer.parseInt(tmp[1]) };
+		 * System.out.println(arr[0] + "," + arr[1]); } else
+		 */if (model == null) {
 			arr = null;
 		} else {
 			switch (method) {
@@ -97,7 +97,7 @@ public class AIsolver {
 		return arr;
 	}
 
-	private static GameBoard copyBoard(GameBoard board) {
+	private GameBoard copyBoard(GameBoard board) {
 		if (board instanceof Board2048)
 			return new Board2048((Board2048) board);
 		else
@@ -113,7 +113,7 @@ public class AIsolver {
 	 * @return
 	 * @throws CloneNotSupportedException
 	 */
-	private static Map<String, Object> minimax(GameBoard theBoard, int depth,
+	private Map<String, Object> minimax(GameBoard theBoard, int depth,
 			Player player) throws CloneNotSupportedException {
 		Map<String, Object> result = new HashMap<>();
 		Integer[] bestDirection = new Integer[2];
@@ -185,14 +185,14 @@ public class AIsolver {
 	/**
 	 * @return an ArrayList with all possible moves
 	 */
-	private static ArrayList<Integer[]> getAllPossibleMoves() {
+	private ArrayList<Integer[]> getAllPossibleMoves() {
 		ArrayList<Integer[]> possibleMoves = null;
 		if (model != null)
 			possibleMoves = model.getPossibleMoves();
 		return possibleMoves;
 	}
 
-	private static ArrayList<Integer[]> listofMoves = getAllPossibleMoves();
+	private ArrayList<Integer[]> listofMoves = getAllPossibleMoves();
 
 	/**
 	 * Finds the best move bay using the Alpha-Beta pruning algorithm.
@@ -205,7 +205,7 @@ public class AIsolver {
 	 * @return
 	 * @throws CloneNotSupportedException
 	 */
-	private static Map<String, Object> alphabeta(GameBoard theBoard, int depth,
+	private Map<String, Object> alphabeta(GameBoard theBoard, int depth,
 			int alpha, int beta, Player player)
 			throws CloneNotSupportedException {
 		Map<String, Object> result = new HashMap<>();
@@ -301,7 +301,7 @@ public class AIsolver {
 	 * @param clusteringScore
 	 * @return
 	 */
-	private static int heuristicScore(int actualScore, int numberOfEmptyCells,
+	private int heuristicScore(int actualScore, int numberOfEmptyCells,
 			int clusteringScore) {
 		int score = (int) (actualScore + Math.log(actualScore)
 				* numberOfEmptyCells - clusteringScore);
@@ -315,7 +315,7 @@ public class AIsolver {
 	 * @param boardArray
 	 * @return
 	 */
-	private static int calculateClusteringScore(int[][] boardArray) {
+	private int calculateClusteringScore(int[][] boardArray) {
 		int clusteringScore = 0;
 
 		int[] neighbors = { -1, 0, 1 };
@@ -366,8 +366,8 @@ public class AIsolver {
 	 * @param player
 	 * @return
 	 */
-	private static Map<String, Object> expectimax(GameBoard theBoard,
-			int depth, Player player) {
+	private Map<String, Object> expectimax(GameBoard theBoard, int depth,
+			Player player) {
 		Map<String, Object> result = new HashMap<String, Object>();
 		if (depth == 0) {
 			if (!model.CheckEndOfGame()) {
@@ -441,7 +441,7 @@ public class AIsolver {
 	 * @param board
 	 * @return
 	 */
-	private static int gradient(GameBoard board) {
+	private int gradient(GameBoard board) {
 		int gradientX = 0;
 		int gradientY = 0;
 

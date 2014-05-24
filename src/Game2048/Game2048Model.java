@@ -3,7 +3,6 @@ package Game2048;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Observable;
-import java.util.Random;
 import java.util.Stack;
 
 import model.GameBoard;
@@ -24,51 +23,51 @@ public class Game2048Model extends Observable implements GameModel,
 	private String difficulty = "Normal";
 	private boolean gameover = false;
 
-//	/**
-//	 * The default constructor of the model will create a 4X4 board
-//	 */
-//	public Game2048Model() {
-//		undo = new Stack<Board2048>();
-//		board = new Board2048(new int[N][N], 0, N);
-//	}
+	// /**
+	// * The default constructor of the model will create a 4X4 board
+	// */
+	// public Game2048Model() {
+	// undo = new Stack<Board2048>();
+	// board = new Board2048(new int[N][N], 0, N);
+	// }
 
-//	/**
-//	 * The constructor will receive the parameter N
-//	 * 
-//	 * @param N
-//	 *            used to set the board size I.e Given N=10 will create board
-//	 *            size 10x10
-//	 */
-//	public Game2048Model(int N) {
-//		this.N = N;
-//		undo = new Stack<Board2048>();
-//		board = new Board2048(new int[N][N], 0, N);
-//	}
+	// /**
+	// * The constructor will receive the parameter N
+	// *
+	// * @param N
+	// * used to set the board size I.e Given N=10 will create board
+	// * size 10x10
+	// */
+	// public Game2048Model(int N) {
+	// this.N = N;
+	// undo = new Stack<Board2048>();
+	// board = new Board2048(new int[N][N], 0, N);
+	// }
 
-//	/**
-//	 * The constructor receives an existing board
-//	 * 
-//	 * @param board
-//	 *            used to create a new model insance based on existing board
-//	 */
-//	public Game2048Model(Board2048 board) {
-//		undo = new Stack<Board2048>();
-//		this.N = board.getN();
-//		this.board = board;
-//	}
-//
-//	/**
-//	 * Copy constructor creates new isntance identical to the given model.
-//	 * 
-//	 * @param newmodel
-//	 *            the model that you'd like to copy.
-//	 */
-//	public Game2048Model(Game2048Model newmodel) {
-//		this.board = newmodel.board;
-//		this.bestscore = newmodel.bestscore;
-//		this.undo = newmodel.undo;
-//		this.gameover = newmodel.gameover;
-//	}
+	// /**
+	// * The constructor receives an existing board
+	// *
+	// * @param board
+	// * used to create a new model insance based on existing board
+	// */
+	// public Game2048Model(Board2048 board) {
+	// undo = new Stack<Board2048>();
+	// this.N = board.getN();
+	// this.board = board;
+	// }
+	//
+	// /**
+	// * Copy constructor creates new isntance identical to the given model.
+	// *
+	// * @param newmodel
+	// * the model that you'd like to copy.
+	// */
+	// public Game2048Model(Game2048Model newmodel) {
+	// this.board = newmodel.board;
+	// this.bestscore = newmodel.bestscore;
+	// this.undo = newmodel.undo;
+	// this.gameover = newmodel.gameover;
+	// }
 
 	/**
 	 * Function receives x,y (direction) to move the existing board in model
@@ -84,7 +83,8 @@ public class Game2048Model extends Observable implements GameModel,
 		if (!gameover) {
 			shiftBoard(x, y);
 		}
-		boolean res = gameover || isBoardEquals(oldBoard.getBoard(), this.board.getBoard());
+		boolean res = gameover
+				|| isBoardEquals(oldBoard.getBoard(), this.board.getBoard());
 		return res;
 	}
 
@@ -108,36 +108,37 @@ public class Game2048Model extends Observable implements GameModel,
 						- dx * x, dx, dy));
 	}
 
-//	/**
-//	 * Movement function will move the board according to X,Y received, and also
-//	 * spawn a new tile
-//	 * 
-//	 * @param dx
-//	 *            what to do on X
-//	 * @param dy
-//	 *            what to do on Y
-//	 * @return boolean that represent whether the board was changed (true) or
-//	 *         the move didn't change it (false)
-//	 */
-//	public boolean movement(int dx, int dy) {
-//		if (!gameover) {
-//			saveData();
-//			saveData();
-//			shiftBoard(dx, dy);
-//			if (!isBoardEquals(undo.pop().getBoard(), board.getBoard())) {
-//				if (difficulty.equals("Hard"))
-//					Spawn();
-//				Spawn();
-//				setBestScore(bestscore);
-//				GameOver();
-//				setChanged();
-//				notifyObservers();
-//				return true;
-//			} else
-//				undo.pop();
-//		}
-//		return false;
-//	}
+	// /**
+	// * Movement function will move the board according to X,Y received, and
+	// also
+	// * spawn a new tile
+	// *
+	// * @param dx
+	// * what to do on X
+	// * @param dy
+	// * what to do on Y
+	// * @return boolean that represent whether the board was changed (true) or
+	// * the move didn't change it (false)
+	// */
+	// public boolean movement(int dx, int dy) {
+	// if (!gameover) {
+	// saveData();
+	// saveData();
+	// shiftBoard(dx, dy);
+	// if (!isBoardEquals(undo.pop().getBoard(), board.getBoard())) {
+	// if (difficulty.equals("Hard"))
+	// Spawn();
+	// Spawn();
+	// setBestScore(bestscore);
+	// GameOver();
+	// setChanged();
+	// notifyObservers();
+	// return true;
+	// } else
+	// undo.pop();
+	// }
+	// return false;
+	// }
 
 	// /**
 	// * Moves the board up
@@ -171,29 +172,31 @@ public class Game2048Model extends Observable implements GameModel,
 	// movement(-1, 0);
 	// }
 
-//	/**
-//	 * checks if the undo stack is empty, if it's not - pop the board and notify
-//	 * the observer for changes
-//	 */
-//	public void undoMove() {
-//		if (!undo.isEmpty()) {
-//			Board2048 ob = new Board2048(new int[N][N], 0, N);
-//			ob = undo.pop();
-//			this.board.setBoard(ob.getBoard());
-//			this.board.setScore(ob.getScore());
-//			gameover = false;
-//			setChanged();
-//			notifyObservers();
-//		}
-//	}
+	// /**
+	// * checks if the undo stack is empty, if it's not - pop the board and
+	// notify
+	// * the observer for changes
+	// */
+	// public void undoMove() {
+	// if (!undo.isEmpty()) {
+	// Board2048 ob = new Board2048(new int[N][N], 0, N);
+	// ob = undo.pop();
+	// this.board.setBoard(ob.getBoard());
+	// this.board.setScore(ob.getScore());
+	// gameover = false;
+	// setChanged();
+	// notifyObservers();
+	// }
+	// }
 
-//	/**
-//	 * push the current board into the stack for using undo moves in the future
-//	 */
-//	private void saveData() {
-//		undo.push(new Board2048(board.getBoard(), board.getScore(), board
-//				.getN()));
-//	}
+	// /**
+	// * push the current board into the stack for using undo moves in the
+	// future
+	// */
+	// private void saveData() {
+	// undo.push(new Board2048(board.getBoard(), board.getScore(), board
+	// .getN()));
+	// }
 
 	/**
 	 * Update the current board and moves it according the parameters * 1,0 =
@@ -210,8 +213,7 @@ public class Game2048Model extends Observable implements GameModel,
 	 * @return a new board after movement
 	 */
 	public Board2048 updateBoard(int x, int y, int dx, int dy) {
-		Board2048 newboard = new Board2048(new int[N][N],
-				board.getScore(), N);
+		Board2048 newboard = new Board2048(new int[N][N], board.getScore(), N);
 		newboard = moveBoard(board, x, y, dx, dy);
 		return newboard;
 	}
@@ -233,8 +235,7 @@ public class Game2048Model extends Observable implements GameModel,
 	 *            - which direction on y axis
 	 * @return a new board after movement
 	 */
-	private Board2048 moveBoard(Board2048 board, int x, int y, int dx,
-			int dy) {
+	private Board2048 moveBoard(Board2048 board, int x, int y, int dx, int dy) {
 		int origx = x, origy = y;
 		// Change the board values
 		while ((0 <= x && x <= (N - 1)) && (0 <= y && y <= (N - 1))) {
@@ -290,35 +291,35 @@ public class Game2048Model extends Observable implements GameModel,
 		return newboard;
 	}
 
-//	/**
-//	 * The function will add a random value to an empty cell 90% chance for
-//	 * adding the value 2 10% chance for adding the value 4
-//	 */
-//	private void Spawn() {
-//		ArrayList<Integer[]> zeroCells = new ArrayList<Integer[]>();
-//		for (int a = 0; a < N; a++)
-//			for (int b = 0; b < N; b++)
-//				if (board.getBoard(a, b) == 0) {
-//					zeroCells.add(new Integer[] { a, b });
-//				}
-//		if (zeroCells.size() >= 1) {
-//			Integer[] putnewnumber = zeroCells.get(new Random()
-//					.nextInt(zeroCells.size()));
-//			if (new Random().nextFloat() * (1 - 0) > 0.1) {
-//				board.setBoard(putnewnumber[0], putnewnumber[1], 2);
-//			} else
-//				board.setBoard(putnewnumber[0], putnewnumber[1], 4);
-//		}
-//	}
+	// /**
+	// * The function will add a random value to an empty cell 90% chance for
+	// * adding the value 2 10% chance for adding the value 4
+	// */
+	// private void Spawn() {
+	// ArrayList<Integer[]> zeroCells = new ArrayList<Integer[]>();
+	// for (int a = 0; a < N; a++)
+	// for (int b = 0; b < N; b++)
+	// if (board.getBoard(a, b) == 0) {
+	// zeroCells.add(new Integer[] { a, b });
+	// }
+	// if (zeroCells.size() >= 1) {
+	// Integer[] putnewnumber = zeroCells.get(new Random()
+	// .nextInt(zeroCells.size()));
+	// if (new Random().nextFloat() * (1 - 0) > 0.1) {
+	// board.setBoard(putnewnumber[0], putnewnumber[1], 2);
+	// } else
+	// board.setBoard(putnewnumber[0], putnewnumber[1], 4);
+	// }
+	// }
 
-//	/**
-//	 * Function to get the Board data member from the model
-//	 * 
-//	 * @return existing board
-//	 */
-//	public Board2048 getBoards() {
-//		return board;
-//	}
+	// /**
+	// * Function to get the Board data member from the model
+	// *
+	// * @return existing board
+	// */
+	// public Board2048 getBoards() {
+	// return board;
+	// }
 
 	/**
 	 * Compares 2 int[][]
@@ -361,8 +362,8 @@ public class Game2048Model extends Observable implements GameModel,
 		// Move current board once to each direction
 		for (int a = 0; a < 4; a++) {
 			boardUp = moveBoard(
-					new Board2048(boardUp, board.getScore(), board.getN()),
-					a, 0, 0, 1).getBoard();
+					new Board2048(boardUp, board.getScore(), board.getN()), a,
+					0, 0, 1).getBoard();
 			boardDown = moveBoard(
 					new Board2048(boardDown, board.getScore(), board.getN()),
 					a, 3, 0, -1).getBoard();
@@ -370,8 +371,8 @@ public class Game2048Model extends Observable implements GameModel,
 					new Board2048(boardLeft, board.getScore(), board.getN()),
 					0, a, 1, 0).getBoard();
 			boardRight = moveBoard(
-					new Board2048(boardRight, board.getScore(),
-							board.getN()), 3, a, -1, 0).getBoard();
+					new Board2048(boardRight, board.getScore(), board.getN()),
+					3, a, -1, 0).getBoard();
 		}
 		// Check if they are all the same boards then game is over
 		if (isBoardEquals(board.getBoard(), boardUp)
@@ -383,26 +384,26 @@ public class Game2048Model extends Observable implements GameModel,
 		gameover = res;
 	}
 
-//	/**
-//	 * Returns the board matrix
-//	 */
-//	@Override
-//	public int[][] getBoard() {
-//		return board.getBoard();
-//	}
+	// /**
+	// * Returns the board matrix
+	// */
+	// @Override
+	// public int[][] getBoard() {
+	// return board.getBoard();
+	// }
 
-	
 	@Override
-	public Board2048 getBoard(){
+	public Board2048 getBoard() {
 		return this.board;
 	}
-//	/**
-//	 * Returns the board score
-//	 */
-//	@Override
-//	public int getScore() {
-//		return board.getScore();
-//	}
+
+	// /**
+	// * Returns the board score
+	// */
+	// @Override
+	// public int getScore() {
+	// return board.getScore();
+	// }
 
 	// @Override
 	// public void moveUp_Right() {
@@ -428,116 +429,118 @@ public class Game2048Model extends Observable implements GameModel,
 	//
 	// }
 
-//	/**
-//	 * Changes the currently used board
-//	 * 
-//	 * @param board
-//	 *            - the board that the model is going to work on
-//	 */
-//	public void setBoard(Board2048 board) {
-//		this.board = board;
-//	}
+	// /**
+	// * Changes the currently used board
+	// *
+	// * @param board
+	// * - the board that the model is going to work on
+	// */
+	// public void setBoard(Board2048 board) {
+	// this.board = board;
+	// }
 
-//	/**
-//	 * Sets the current board array
-//	 * 
-//	 * @param board
-//	 *            - int[][] to represent the new board
-//	 */
-//	@Override
-//	public void setBoard(int[][] board) {
-//		// this.board = board;
-//		this.board.setBoard(board);
-//	}
+	// /**
+	// * Sets the current board array
+	// *
+	// * @param board
+	// * - int[][] to represent the new board
+	// */
+	// @Override
+	// public void setBoard(int[][] board) {
+	// // this.board = board;
+	// this.board.setBoard(board);
+	// }
 
-//	/**
-//	 * Sets the board score
-//	 * 
-//	 * @param score
-//	 *            - the new score
-//	 */
-//	@Override
-//	public void setScore(int score) {
-//		// this.score = score;
-//		this.board.setScore(score);
-//	}
-//
-//	/**
-//	 * Gets the best score known by the model
-//	 * 
-//	 * @return int
-//	 */
-//	@Override
-//	public int getBestScore() {
-//		return bestscore;
-//	}
-//
-//	/**
-//	 * Based on given newscore as parameter checks if the score is higher than
-//	 * the current best score, if so updates it
-//	 * 
-//	 * @param newscore
-//	 *            - the new score to update
-//	 */
-//	@Override
-//	public void setBestScore(int newscore) {
-//		if (this.board.getScore() > this.bestscore)
-//			this.bestscore = this.board.getScore();
-//	}
+	// /**
+	// * Sets the board score
+	// *
+	// * @param score
+	// * - the new score
+	// */
+	// @Override
+	// public void setScore(int score) {
+	// // this.score = score;
+	// this.board.setScore(score);
+	// }
+	//
+	// /**
+	// * Gets the best score known by the model
+	// *
+	// * @return int
+	// */
+	// @Override
+	// public int getBestScore() {
+	// return bestscore;
+	// }
+	//
+	// /**
+	// * Based on given newscore as parameter checks if the score is higher than
+	// * the current best score, if so updates it
+	// *
+	// * @param newscore
+	// * - the new score to update
+	// */
+	// @Override
+	// public void setBestScore(int newscore) {
+	// if (this.board.getScore() > this.bestscore)
+	// this.bestscore = this.board.getScore();
+	// }
 
-//	/**
-//	 * Returns a stack contains the moves done by the player
-//	 */
-//	@Override
-//	public Stack<Board2048> getMoves() {
-//		return undo;
-//	}
-//
-//	/**
-//	 * Replaces the current stack holds the moves done by the player
-//	 * 
-//	 * @param moves
-//	 *            - new stack with the old moves
-//	 */
-//	@Override
-//	public void setMoves(Stack moves) {
-//		undo = moves;
-//	}
+	// /**
+	// * Returns a stack contains the moves done by the player
+	// */
+	// @Override
+	// public Stack<Board2048> getMoves() {
+	// return undo;
+	// }
+	//
+	// /**
+	// * Replaces the current stack holds the moves done by the player
+	// *
+	// * @param moves
+	// * - new stack with the old moves
+	// */
+	// @Override
+	// public void setMoves(Stack moves) {
+	// undo = moves;
+	// }
 
 	/**
 	 * Returns true if the game is over, else returns false
 	 */
 	@Override
 	public boolean CheckEndOfGame() {
-//		GameOver();
+		// GameOver();
 		return gameover;
 	}
 
-//	/**
-//	 * Initialize the current board: Sets the board to be a new game, clears the
-//	 * old moves done by the player, clears the board, set score to 0 and adds 2
-//	 * cells in random location
-//	 */
-//	@Override
-//	public void InitBoard() {
-//		gameover = false;
-//		undo.removeAllElements();
-//		board.setBoard(new int[N][N]);
-//		int x = new Random().nextInt(4), y = new Random().nextInt(4);
-//		int mx = x, my = y;
-//		board.setBoard(x, y, 2);
-//		int add = 2;
-//		if (new Random().nextFloat() * (1 - 0) <= 0.1)
-//			add = 4;
-//		while (mx == x)
-//			mx = new Random().nextInt(4);
-//		while (my == y)
-//			my = new Random().nextInt(4);
-//		board.setBoard(mx, my, add);
-//		board.setScore(0);
-//		setChanged();
-//		notifyObservers();
-//	}
+	// /**
+	// * Initialize the current board: Sets the board to be a new game, clears
+	// the
+	// * old moves done by the player, clears the board, set score to 0 and adds
+	// 2
+	// * cells in random location
+	// */
+	// @Override
+	// public void InitBoard() {
+	// gameover = false;
+	// undo.removeAllElements();
+	// board.setBoard(new int[N][N]);
+	// int x = new Random().nextInt(4), y = new Random().nextInt(4);
+	// int mx = x, my = y;
+	// board.setBoard(x, y, 2);
+	// int add = 2;
+	// if (new Random().nextFloat() * (1 - 0) <= 0.1)
+	// add = 4;
+	// while (mx == x)
+	// mx = new Random().nextInt(4);
+	// while (my == y)
+	// my = new Random().nextInt(4);
+	// board.setBoard(mx, my, add);
+	// board.setScore(0);
+	// setChanged();
+	// notifyObservers();
+	// }
 
 	/**
 	 * Saves the current model to XML file.
@@ -571,17 +574,17 @@ public class Game2048Model extends Observable implements GameModel,
 	// return true;
 	// }
 
-//	/**
-//	 * Change the difficulty of the game
-//	 * 
-//	 * @param arg1
-//	 *            - "Normal" - will pop only 1 tile after a valid move "Hard" -
-//	 *            will pop 2 tiles after a valid move
-//	 */
-//	@Override
-//	public void setDifficulty(String arg1) {
-//		difficulty = arg1;
-//	}
+	// /**
+	// * Change the difficulty of the game
+	// *
+	// * @param arg1
+	// * - "Normal" - will pop only 1 tile after a valid move "Hard" -
+	// * will pop 2 tiles after a valid move
+	// */
+	// @Override
+	// public void setDifficulty(String arg1) {
+	// difficulty = arg1;
+	// }
 
 	/**
 	 * Print the board
