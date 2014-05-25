@@ -1,5 +1,7 @@
 package model;
 
+import solvers.Solver;
+
 public interface ServerModel {
 	
 	/**
@@ -13,12 +15,6 @@ public interface ServerModel {
 	 * @return number of port
 	 */
 	int GetPort();
-	
-	
-	//void start();
-	
-	
-	//void close();
 	
 	/**
 	 * Get all client that connected to server
@@ -44,6 +40,11 @@ public interface ServerModel {
 	 * Initialize server params - server client handler
 	 */
 	void InitServer();
+	
+	/**
+	 * Init based on given clientHanlder and solver
+	 */
+	void InitServer(ClientHandler ch, Solver solver);
 	
 	/**
 	 * Start server listening to requests

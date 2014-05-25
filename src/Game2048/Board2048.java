@@ -218,17 +218,4 @@ public class Board2048 implements GameBoard,Serializable{
 			}
 		return str.hashCode();
 	}
-
-	/**
-	 * Prints the board
-	 */
-	public void Print() {
-		for (int i = 0; i < N; i++) {
-			for (int j = 0; j < N; j++) {
-				System.out.print(board[i][j] + "\t");
-			}
-			System.out.println();
-		}
-		System.out.println("Score " + score);
-	}
 }
