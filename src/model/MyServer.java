@@ -26,7 +26,7 @@ public class MyServer extends Observable implements ServerModel {
 	private int port;
 	private ServerSocket server;
 	private boolean stop;
-	int NumberOfClients;
+	private int NumberOfClients;
 	private ClientHandler clientHandler;
 	private ServerConfiguration config;
 	private List<String> clientsList = new ArrayList<String>();
@@ -36,9 +36,9 @@ public class MyServer extends Observable implements ServerModel {
 	public MyServer() {
 		config = new ServerConfiguration();
 		config.Load();
-		this.port = config.Port;
+		this.port = config.getPort();
 		stop = false;
-		this.NumberOfClients = config.NumberOfClients;
+		this.NumberOfClients = config.getNumberOfClients();
 		logMap = new HashMap<String, String>();
 
 	}
@@ -46,8 +46,9 @@ public class MyServer extends Observable implements ServerModel {
 	@Override
 	public void SetServerConfiguration(ServerConfiguration config) {
 		this.config=config;
-		this.port = config.Port;
-		this.NumberOfClients = config.NumberOfClients;
+		this.config.Save();
+		this.port = config.getPort();
+		this.NumberOfClients = config.getNumberOfClients();
 	}
 	@Override
 	public int GetPort() {

@@ -4,8 +4,8 @@ import Converter.ServerXMLManager;
 
 public class ServerConfiguration {
 
-	public int Port;
-	public int NumberOfClients;
+	private int Port;
+	private int NumberOfClients;
 	private ServerXMLManager XMLManager = new ServerXMLManager();
 	
 	public ServerConfiguration(){}
@@ -15,7 +15,14 @@ public class ServerConfiguration {
 		this.NumberOfClients=NumberOfClients;
 	
 	}
-	
+	public int getPort()
+	{
+		return Port;
+	}
+	public int getNumberOfClients()
+	{
+		return NumberOfClients;	
+	}
 	public boolean Save() {
 		
 		return XMLManager.ToFile(this, "Configuration.xml");
