@@ -19,6 +19,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import solvers.AIsolver;
+import solvers.Solver;
 
 public class MyServer extends Observable implements ServerModel {
 
@@ -30,7 +31,8 @@ public class MyServer extends Observable implements ServerModel {
 	private ServerConfiguration config;
 	private List<String> clientsList = new ArrayList<String>();
 	private Map<String, String> logMap;
-
+	private Solver solver;
+	
 	public MyServer() {
 		config = new ServerConfiguration();
 		config.Load();
@@ -41,6 +43,13 @@ public class MyServer extends Observable implements ServerModel {
 
 	}
 
+	@Override
+	public void SetServerConfiguration(ServerConfiguration config) {
+		this.config=config;
+		this.port = config.Port;
+		this.NumberOfClients = config.NumberOfClients;
+	}
+	@Override
 	public int GetPort() {
 		return port;
 	}
@@ -112,6 +121,7 @@ public class MyServer extends Observable implements ServerModel {
 		stop = true;
 	}
 
+	@Override
 	public String[] GetClientsList() {
 		return clientsList.toArray(new String[clientsList.size()]);
 	}
@@ -129,10 +139,12 @@ public class MyServer extends Observable implements ServerModel {
 		}
 	}
 
+	@Override
 	public String GetClientLog(String clientIP) {
 		return logMap.get(clientIP);
 	}
 
+	@Override
 	public boolean WriteLog(String log) {
 		try {
 			DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
@@ -149,8 +161,11 @@ public class MyServer extends Observable implements ServerModel {
 
 	}
 
+	@Override
 	public void InitServer() {
 
+		solver=new AIsolver();
+		
 		clientHandler = new ClientHandler() {
 			@Override
 			public void handleClient(Socket someClient) {
@@ -164,10 +179,10 @@ public class MyServer extends Observable implements ServerModel {
 						out2client = new ObjectOutputStream(
 								someClient.getOutputStream());
 						request = (ClientRequest) (inFromClient.readObject());
-						AIsolver ai = new AIsolver();
-						Integer[] move = ai.findBestMove(request.getBoard(),
-								request.getDepth(), request.getMethod(),
-								request.getModel());
+						//AIsolver ai = new AIsolver();
+						//Integer[] move = ai.findBestMove(request.getBoard(),request.getDepth(), request.getMethod(),request.getModel());
+						Integer[] move = solver.Run(request);
+						
 						AddLogToMap(someClient.getRemoteSocketAddress()
 								.toString().substring(1), request.getModel()
 								.ArrayToString(move));
@@ -193,7 +208,7 @@ public class MyServer extends Observable implements ServerModel {
 		};
 
 	}
-
+	@Override
 	public boolean RunServer() {
 		try {
 			start();
@@ -204,7 +219,7 @@ public class MyServer extends Observable implements ServerModel {
 			return false;
 		}
 	}
-
+	@Override
 	public boolean StopServer() {
 		try {
 			close();

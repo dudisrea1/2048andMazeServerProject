@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import Game2048.Board2048;
+import model.ClientRequest;
 import model.GameBoard;
 import model.GameModel;
 
@@ -15,7 +16,7 @@ import model.GameModel;
  * 
  * @author Vasilis Vryniotis <bbriniotis at datumbox.com>
  */
-public class AIsolver {
+public class AIsolver implements Solver{
 	private GameModel model = null;
 
 	/**
@@ -459,5 +460,14 @@ public class AIsolver {
 		// Absolute value ensures that both directions are taken into
 		// account
 		return Math.abs(gradientX) + Math.abs(gradientY);
+	}
+
+	@Override
+	public Integer[] Run(ClientRequest request) {
+		try {
+			return findBestMove(request.getBoard(),request.getDepth(), request.getMethod(),request.getModel());
+		} catch (CloneNotSupportedException e) {
+			return null;
+		}
 	}
 }

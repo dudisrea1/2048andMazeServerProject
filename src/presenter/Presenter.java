@@ -3,6 +3,7 @@ package presenter;
 import java.util.Observable;
 import java.util.Observer;
 
+import model.ServerConfiguration;
 import model.ServerModel;
 import view.View;
 
@@ -32,6 +33,9 @@ public class Presenter implements Observer {
 				break;
 			case 3: // show client log
 				ui.displayClientLog(myServer.GetClientLog((String) arg1));
+				break;
+			case 4: // set server configuration
+				myServer.SetServerConfiguration((ServerConfiguration) arg1);
 				break;
 			}
 

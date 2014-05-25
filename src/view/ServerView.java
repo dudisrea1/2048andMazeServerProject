@@ -2,6 +2,8 @@ package view;
 
 import java.util.Observable;
 
+import model.ServerConfiguration;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -12,17 +14,22 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
+import Screens.OptionScreen;
 
 public class ServerView extends Observable implements View, Runnable {
-
+	private Menu menuBar, fileMenu;
+	private MenuItem fileMenuHeader, fileOptionsItem;
 	private Text logText,status;
 	private Button runServer_btn, stopServer_btn;
 	private Display display;
 	private Shell shell;
-
+	private OptionScreen optionsScr;
+	
 	private List clientsList;
 	private int userCommand;
 	boolean serverRunning = false;
@@ -64,6 +71,21 @@ public class ServerView extends Observable implements View, Runnable {
 
 	private void initButtonsandLabels() {
 
+		menuBar = new Menu(shell, SWT.BAR);
+		fileMenuHeader = new MenuItem(menuBar, SWT.CASCADE);
+		fileMenuHeader.setText("File");
+
+		fileMenu = new Menu(shell, SWT.DROP_DOWN);
+		fileMenuHeader.setMenu(fileMenu);
+		
+		fileOptionsItem = new MenuItem(fileMenu, SWT.PUSH);
+		fileOptionsItem.setText("Options");
+		
+		optionsScr = new OptionScreen(shell);
+		fileOptionsItem.addSelectionListener(new fileOptionsItemListener());
+
+		shell.setMenuBar(menuBar);
+		
 		GridData buttonGrid = new GridData(SWT.FILL, SWT.FILL, false, false, 1,
 				1);
 
@@ -103,6 +125,19 @@ public class ServerView extends Observable implements View, Runnable {
 
 	}
 
+	class fileOptionsItemListener implements SelectionListener {
+		public void widgetSelected(SelectionEvent event) {
+			optionsScr.open();
+			setUserCommand(4, new ServerConfiguration(optionsScr.getPort(), optionsScr.getNumberOfClient()));
+		}
+
+		public void widgetDefaultSelected(SelectionEvent event) {
+		}
+	}
+	private void ServerConfigurationSelection() {
+		 optionsScr.open();
+	}
+	
 	@Override
 	public void run() {
 		initComponents();
