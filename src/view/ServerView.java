@@ -27,12 +27,12 @@ import Screens.OptionScreen;
 public class ServerView extends Observable implements View, Runnable {
 	private Menu menuBar, fileMenu;
 	private MenuItem fileMenuHeader, fileOptionsItem;
-	private Text logText,status;
+	private Text logText, status;
 	private Button runServer_btn, stopServer_btn;
 	private Display display;
 	private Shell shell;
 	private OptionScreen optionsScr;
-	
+
 	private List clientsList;
 	private int userCommand;
 	boolean serverRunning = false;
@@ -80,15 +80,15 @@ public class ServerView extends Observable implements View, Runnable {
 
 		fileMenu = new Menu(shell, SWT.DROP_DOWN);
 		fileMenuHeader.setMenu(fileMenu);
-		
+
 		fileOptionsItem = new MenuItem(fileMenu, SWT.PUSH);
 		fileOptionsItem.setText("Options");
-		
+
 		optionsScr = new OptionScreen(shell);
 		fileOptionsItem.addSelectionListener(new fileOptionsItemListener());
 
 		shell.setMenuBar(menuBar);
-		
+
 		GridData buttonGrid = new GridData(SWT.FILL, SWT.FILL, false, false, 1,
 				1);
 
@@ -119,30 +119,29 @@ public class ServerView extends Observable implements View, Runnable {
 				1, 1));
 		clientsList.addSelectionListener(new ClientItemListener());
 		clientsList.addListener(SWT.MouseDoubleClick, new Listener() {
-			
+
 			@Override
 			public void handleEvent(Event arg0) {
 				new ClientItemListener().widgetSelected(null);
 			}
 		});
-		
+
 		ServerConfiguration config = new ServerConfiguration();
 		config.Load();
-		String invalid="";
-		int port = ViewUtilities.verifyNumberInRange(String.valueOf(config.getPort()), 1, 65535);
+		String invalid = "";
+		int port = ViewUtilities.verifyNumberInRange(
+				String.valueOf(config.getPort()), 1, 65535);
 		if (port == -1)
 			invalid += "Invalid Port number, must be number between 1-65535.\n";
-		
-		if (config.getNumberOfClients() <1 || config.getNumberOfClients() >20)
+
+		if (config.getNumberOfClients() < 1 || config.getNumberOfClients() > 20)
 			invalid += "Invalid number of clients, must be a number between 0-20.";
-		
-		if (invalid.isEmpty())
-		{
-			runServer_btn.setEnabled(true);			
-		}
-		else
-		{
-			ViewUtilities.displayMessage(Display.getDefault(),shell, "Invalid Parameters given",invalid, SWT.ERROR);
+
+		if (invalid.isEmpty()) {
+			runServer_btn.setEnabled(true);
+		} else {
+			ViewUtilities.displayMessage(Display.getDefault(), shell,
+					"Can not start server", "Change configuration parameters at File -> Options", SWT.ERROR);
 			runServer_btn.setEnabled(false);
 		}
 		stopServer_btn.setEnabled(false);
@@ -152,22 +151,18 @@ public class ServerView extends Observable implements View, Runnable {
 	class fileOptionsItemListener implements SelectionListener {
 		public void widgetSelected(SelectionEvent event) {
 			optionsScr.open();
-			if(optionsScr.serverEnabled())
-			{
-			setUserCommand(4, new ServerConfiguration(optionsScr.getPort(), optionsScr.getNumberOfClient()));
-			runServer_btn.setEnabled(true);
-			}
-			else
+			if (optionsScr.serverEnabled()) {
+				setUserCommand(4, new ServerConfiguration(optionsScr.getPort(),
+						optionsScr.getNumberOfClient()));
+				runServer_btn.setEnabled(true);
+			} else
 				runServer_btn.setEnabled(false);
 		}
 
 		public void widgetDefaultSelected(SelectionEvent event) {
 		}
 	}
-	private void ServerConfigurationSelection() {
-		 optionsScr.open();
-	}
-	
+
 	@Override
 	public void run() {
 		initComponents();
@@ -210,7 +205,6 @@ public class ServerView extends Observable implements View, Runnable {
 		@Override
 		public void widgetSelected(SelectionEvent arg0) {
 
-			
 			status.setText("Server Running");
 			setUserCommand(1);
 			stopServer_btn.setEnabled(true);

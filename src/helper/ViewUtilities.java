@@ -30,6 +30,8 @@ public class ViewUtilities {
 	 */
 
 	public static int verifyNumberInRange(String number, int min, int max) {
+		if(number.isEmpty())
+			return -1;
 		char[] chars = new char[number.length()];
 		number.getChars(0, chars.length, chars, 0);
 		for (int i = 0; i < chars.length; i++) {

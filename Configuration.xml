@@ -1,1 +1,1 @@
-<?xml version="1.0" ?><model.ServerConfiguration><Port>5001</Port><NumberOfClients>5</NumberOfClients><XMLManager></XMLManager></model.ServerConfiguration>
+<?xml version="1.0" ?><model.ServerConfiguration><Port></Port><NumberOfClients>5</NumberOfClients><XMLManager></XMLManager></model.ServerConfiguration>
