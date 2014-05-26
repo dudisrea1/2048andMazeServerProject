@@ -1,5 +1,7 @@
 package view;
 
+import helper.ViewUtilities;
+
 import java.util.Observable;
 
 import model.ServerConfiguration;
@@ -19,6 +21,7 @@ import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
+
 import Screens.OptionScreen;
 
 public class ServerView extends Observable implements View, Runnable {
@@ -122,13 +125,40 @@ public class ServerView extends Observable implements View, Runnable {
 				new ClientItemListener().widgetSelected(null);
 			}
 		});
+		
+		ServerConfiguration config = new ServerConfiguration();
+		config.Load();
+		String invalid="";
+		int port = ViewUtilities.verifyNumberInRange(String.valueOf(config.getPort()), 1, 65535);
+		if (port == -1)
+			invalid += "Invalid Port number, must be number between 1-65535.\n";
+		
+		if (config.getNumberOfClients() <1 || config.getNumberOfClients() >20)
+			invalid += "Invalid number of clients, must be a number between 0-20.";
+		
+		if (invalid.isEmpty())
+		{
+			runServer_btn.setEnabled(true);			
+		}
+		else
+		{
+			ViewUtilities.displayMessage(Display.getDefault(),shell, "Invalid Parameters given",invalid, SWT.ERROR);
+			runServer_btn.setEnabled(false);
+		}
+		stopServer_btn.setEnabled(false);
 
 	}
 
 	class fileOptionsItemListener implements SelectionListener {
 		public void widgetSelected(SelectionEvent event) {
 			optionsScr.open();
+			if(optionsScr.serverEnabled())
+			{
 			setUserCommand(4, new ServerConfiguration(optionsScr.getPort(), optionsScr.getNumberOfClient()));
+			runServer_btn.setEnabled(true);
+			}
+			else
+				runServer_btn.setEnabled(false);
 		}
 
 		public void widgetDefaultSelected(SelectionEvent event) {
@@ -180,6 +210,7 @@ public class ServerView extends Observable implements View, Runnable {
 		@Override
 		public void widgetSelected(SelectionEvent arg0) {
 
+			
 			status.setText("Server Running");
 			setUserCommand(1);
 			stopServer_btn.setEnabled(true);

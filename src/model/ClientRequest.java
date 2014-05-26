@@ -52,4 +52,9 @@ public class ClientRequest implements Serializable{
 	public void setModel(GameModel model) {
 		this.model = model;
 	}
+	
+	public void PrintBoard(){
+		Board.Print();
+	}
+
 }

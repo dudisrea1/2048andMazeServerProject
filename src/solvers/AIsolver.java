@@ -16,7 +16,7 @@ import model.GameModel;
  * 
  * @author Vasilis Vryniotis <bbriniotis at datumbox.com>
  */
-public class AIsolver implements Solver {
+public class AIsolver implements Solver{
 	private GameModel model = null;
 
 	/**
@@ -68,12 +68,13 @@ public class AIsolver implements Solver {
 			listofMoves = model.getPossibleMoves();
 		Map<String, Object> result = new HashMap<String, Object>();
 		Integer[] arr = new Integer[2];
-		if (bestMovesCache.get("" + theBoard.getBoardHash()) != null) {
-			String[] tmp = bestMovesCache.get(
-					new String("" + theBoard.getBoardHash())).split(",");
-			arr = new Integer[] { Integer.parseInt(tmp[0]),
-					Integer.parseInt(tmp[1]) };
-		} else if (model == null) {
+		/*
+		 * if (bestMovesCache.get("" + theBoard.getBoardHash()) != null) {
+		 * String[] tmp = bestMovesCache.get( new String("" +
+		 * theBoard.getBoardHash())).split(","); arr = new Integer[] {
+		 * Integer.parseInt(tmp[0]), Integer.parseInt(tmp[1]) };
+		 * System.out.println(arr[0] + "," + arr[1]); } else
+		 */if (model == null) {
 			arr = null;
 		} else {
 			switch (method) {
@@ -464,8 +465,7 @@ public class AIsolver implements Solver {
 	@Override
 	public Integer[] Run(ClientRequest request) {
 		try {
-			return findBestMove(request.getBoard(), request.getDepth(),
-					request.getMethod(), request.getModel());
+			return findBestMove(request.getBoard(),request.getDepth(), request.getMethod(),request.getModel());
 		} catch (CloneNotSupportedException e) {
 			return null;
 		}

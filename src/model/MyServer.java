@@ -32,7 +32,7 @@ public class MyServer extends Observable implements ServerModel {
 	private List<String> clientsList = new ArrayList<String>();
 	private Map<String, String> logMap;
 	private Solver solver;
-
+	
 	public MyServer() {
 		config = new ServerConfiguration();
 		config.Load();
@@ -45,12 +45,11 @@ public class MyServer extends Observable implements ServerModel {
 
 	@Override
 	public void SetServerConfiguration(ServerConfiguration config) {
-		this.config = config;
+		this.config=config;
 		this.config.Save();
 		this.port = config.getPort();
 		this.NumberOfClients = config.getNumberOfClients();
 	}
-
 	@Override
 	public int GetPort() {
 		return port;
@@ -77,6 +76,8 @@ public class MyServer extends Observable implements ServerModel {
 										.toString().substring(1);
 
 								AddLogToMap(ClientIP, "Client Connected");
+								WriteLog("Client Connected: " + ClientIP);
+
 								clientsList.add(ClientIP);
 								setChanged();
 								notifyObservers();
@@ -98,6 +99,7 @@ public class MyServer extends Observable implements ServerModel {
 							ThreadPool.shutdown();
 							server.close();
 						} catch (IOException e) {
+							e.printStackTrace();
 						}
 						WriteLog("Server Closed");
 					}
@@ -107,7 +109,7 @@ public class MyServer extends Observable implements ServerModel {
 				notifyObservers();
 
 			} else {
-				WriteLog("Error: illegal NumberOfClients. server closed");
+				WriteLog("error: illegal NumberOfClients. server closed");
 				setChanged();
 				notifyObservers();
 			}
@@ -133,10 +135,8 @@ public class MyServer extends Observable implements ServerModel {
 		if (value != null) {
 			logMap.put(clientIP, value + dateFormat.format(date) + " - " + log
 					+ "\r\n");
-			WriteLog(clientIP + " - " + log);
 		} else {
 			logMap.put(clientIP, dateFormat.format(date) + " - " + log + "\r\n");
-			WriteLog(clientIP + " - " + log);
 		}
 	}
 
@@ -159,17 +159,14 @@ public class MyServer extends Observable implements ServerModel {
 		} catch (Exception e) {
 			return false;
 		}
+
 	}
 
 	@Override
-	public void InitServer(ClientHandler ch, Solver solver) {
-		this.solver = solver;
-		clientHandler = ch;
-	}
-	
-	@Override
 	public void InitServer() {
-		solver = new AIsolver();
+
+		solver=new AIsolver();
+		
 		clientHandler = new ClientHandler() {
 			@Override
 			public void handleClient(Socket someClient) {
@@ -177,29 +174,30 @@ public class MyServer extends Observable implements ServerModel {
 				ObjectInputStream inFromClient = null;
 				ObjectOutputStream out2client = null;
 				try {
-					while (!someClient.isClosed() && !server.isClosed()) {
+					while (!someClient.isClosed()) {
 						inFromClient = new ObjectInputStream(
 								someClient.getInputStream());
 						out2client = new ObjectOutputStream(
 								someClient.getOutputStream());
 						request = (ClientRequest) (inFromClient.readObject());
+						
 						Integer[] move = solver.Run(request);
-
+						
 						AddLogToMap(someClient.getRemoteSocketAddress()
 								.toString().substring(1), request.getModel()
 								.ArrayToString(move));
+						// Double check if the client didn't disconnect in the
+						// middle
 						if (!someClient.isClosed()) {
 							out2client.writeObject(move);
 							out2client.flush();
 						}
 					}
-					AddLogToMap(someClient.getRemoteSocketAddress().toString()
-							.substring(1), "Client Disconnected");
-					someClient.close();
+
 				} catch (Exception e) {
 					try {
-						AddLogToMap(someClient.getRemoteSocketAddress()
-								.toString().substring(1), "Client Disconnected");
+						AddLogToMap(someClient.getRemoteSocketAddress().toString()
+								.substring(1), "Client Disconnected");
 						someClient.close();
 					} catch (IOException e1) {
 					}
@@ -208,19 +206,17 @@ public class MyServer extends Observable implements ServerModel {
 		};
 
 	}
-
 	@Override
 	public boolean RunServer() {
 		try {
 			start();
-			WriteLog("Server Started");
+			WriteLog("server started");
 			return true;
 
-		} catch (Exception e) {
+		} catch (Exception e) {  
 			return false;
 		}
 	}
-
 	@Override
 	public boolean StopServer() {
 		try {
@@ -230,4 +226,5 @@ public class MyServer extends Observable implements ServerModel {
 			return false;
 		}
 	}
+
 }

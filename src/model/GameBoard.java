@@ -18,4 +18,6 @@ public interface GameBoard {
 	public List<Integer> getEmptyCellIds();
 	public void setEmptyCell(int i, int j, int value);
 	public int getBoardHash();
+	public void Print();
+	
 }

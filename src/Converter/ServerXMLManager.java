@@ -18,6 +18,7 @@ public class ServerXMLManager {
 			return true;
 
 		} catch (Exception exp) {
+			System.out.print(exp.toString());
 			return false;
 		}
 	}
